@@ -19,12 +19,59 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        alignment: Alignment.center,  // เพิ่ม alignment ให้ Text อยู่กลางจอ
-        color: Color.fromARGB(255, 0, 0, 0), // แก้ไขค่า alpha ให้เป็น 255 เพื่อให้สีดำสนิท
-        child: const Text(
-          "Take",
-          style: TextStyle(color: Colors.white, fontSize: 24), // เพิ่มขนาดฟอนต์ให้ใหญ่ขึ้น
+      body: SizedBox.expand(
+        child: Container(
+          padding: const EdgeInsets.only(top: 40.0, left: 10.0),
+          color: const Color.fromARGB(255, 0, 0, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Take',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 70,
+                  height: 0.9, // ปรับระยะห่างระหว่างบรรทัด
+                ),
+              ),
+              const Text(
+                'your',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 70,
+                  height: 0.9, // ปรับระยะห่างระหว่างบรรทัด
+                ),
+              ),
+              const Text(
+                'time',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 70,
+                  height: 0.9, // ปรับระยะห่างระหว่างบรรทัด
+                ),
+              ),
+              const Text(
+                "We are born to be happy not to race with other people on everything we do",
+                style: TextStyle(color: Colors.white),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // ฟังก์ชันที่เรียกเมื่อปุ่มถูกกด
+                  print('Button Pressed!');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Colors.blue, // เปลี่ยนจาก primary เป็น backgroundColor
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20, vertical: 15), // ขนาดของปุ่ม
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10), // ขอบโค้ง
+                  ),
+                ),
+                child: const Text('Press Me'),
+              )
+            ],
+          ),
         ),
       ),
     );

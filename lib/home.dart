@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart'; // นำเข้าแพ็กเกจ Google Fonts
+import 'package:google_fonts/google_fonts.dart';
+import 'list.dart'; // นำเข้าคลาส ListPage
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,7 +15,6 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ข้อความ "Take your time" อยู่ที่เดิม
               Align(
                 alignment: Alignment.topLeft,
                 child: Column(
@@ -25,8 +25,8 @@ class HomePage extends StatelessWidget {
                       style: GoogleFonts.cormorantGaramond(
                         fontSize: 80,
                         fontWeight: FontWeight.w700,
-                        height: 0.9, // ปรับระยะห่างระหว่างบรรทัด
-                        color: Colors.white, // เพิ่มสีขาวให้กับข้อความ
+                        height: 0.9,
+                        color: Colors.white,
                       ),
                     ),
                     Text(
@@ -34,8 +34,8 @@ class HomePage extends StatelessWidget {
                       style: GoogleFonts.cormorantGaramond(
                         fontSize: 80,
                         fontWeight: FontWeight.w700,
-                        height: 0.9, // ปรับระยะห่างระหว่างบรรทัด
-                        color: Colors.white, // เพิ่มสีขาวให้กับข้อความ
+                        height: 0.9,
+                        color: Colors.white,
                       ),
                     ),
                     Text(
@@ -43,85 +43,68 @@ class HomePage extends StatelessWidget {
                       style: GoogleFonts.cormorantGaramond(
                         fontSize: 80,
                         fontWeight: FontWeight.w700,
-                        height: 0.9, // ปรับระยะห่างระหว่างบรรทัด
-                        color: Colors.white, // เพิ่มสีขาวให้กับข้อความ
+                        height: 0.9,
+                        color: Colors.white,
                       ),
                     ),
                   ],
                 ),
               ),
-              // ข้อความกลาง
               Expanded(
                 child: Container(
                   alignment: Alignment.topLeft,
-                  padding: const EdgeInsets.only(
-                      top: 250), // ปรับระยะห่างจากขอบซ้ายและขวา
+                  padding: const EdgeInsets.only(top: 250),
                   child: Text(
                     "We are born to be happy, \nnot to race with other people \non everything we do",
-                    textAlign: TextAlign.start, // จัดตำแหน่งข้อความที่เริ่มต้น
+                    textAlign: TextAlign.start,
                     style: GoogleFonts.cormorantGaramond(
-                      fontSize: 20, // ปรับขนาดข้อความตามที่ต้องการ
+                      fontSize: 20,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white, // เพิ่มสีขาวให้กับข้อความ
+                      color: Colors.white,
                     ),
                   ),
                 ),
               ),
-
-              // ปุ่มอยู่ที่ล่างสุด
               Padding(
                 padding: const EdgeInsets.only(bottom: 0),
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // แสดงกล่องข้อความป๊อปอัพ
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Note'),
-                            content: const Text('ยังไม่ได้ทำนะจ๊ะ'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(); // ปิดกล่องข้อความ
-                                },
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 0,
-                          vertical: 10), // ปรับขนาดของปุ่มให้เหมาะสม
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero, // ขอบโค้ง
-                      ),
-                    ),
-                    // ignore: avoid_unnecessary_containers
-                    child: Container(
-                      child: Center(
-                        child: Text(
-                          "Get Started",
-                          textAlign: TextAlign.center, // จัดตำแหน่งข้อความกลาง
-                          overflow: TextOverflow.ellipsis, // จัดการกับข้อความยาว
-                          style: GoogleFonts.cormorantGaramond(
-                            fontSize: 35,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.black, // เพิ่มสีดำให้กับข้อความ
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  child: StartButton(context),
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget StartButton(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ListPage()),
+        );
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+        ),
+      ),
+      child: Container(
+        child: Center(
+          child: Text(
+            "Get Started",
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.cormorantGaramond(
+              fontSize: 35,
+              fontWeight: FontWeight.w800,
+              color: Colors.black,
+            ),
           ),
         ),
       ),

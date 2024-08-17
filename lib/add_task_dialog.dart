@@ -7,38 +7,78 @@ class AddTaskDialog extends StatefulWidget {
 
 class _AddTaskDialogState extends State<AddTaskDialog> {
   final _titleController = TextEditingController();
-  final _timeController = TextEditingController();
+  final _timeController = TextEditingController(); // ใช้สำหรับแสดงเวลา
   final _detailsController = TextEditingController();
+  TimeOfDay? _selectedTime;
+
+  // ฟังก์ชันเปิด TimePicker
+  Future<void> _pickTime() async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime ?? TimeOfDay.now(),
+    );
+    if (picked != null && picked != _selectedTime) {
+      setState(() {
+        _selectedTime = picked;
+        _timeController.text = _selectedTime!.format(context); // อัปเดตค่าใน TextField
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('เพิ่มกิจกรรม'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _titleController,
-            decoration: const InputDecoration(labelText: 'ชื่อกิจกรรม'),
-          ),
-          TextField(
-            controller: _timeController,
-            decoration: const InputDecoration(labelText: 'เวลา'),
-          ),
-          TextField(
-            controller: _detailsController,
-            decoration: const InputDecoration(labelText: 'รายละเอียด'),
-          ),
-        ],
+      title: const Text(
+        'TO DO LIST',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _titleController,
+              decoration: const InputDecoration(
+                labelText: 'TASK',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 15),
+            GestureDetector(
+              onTap: _pickTime,
+              child: AbsorbPointer(
+                child: TextField(
+                  controller: _timeController, // ใช้ controller เพื่อแสดงเวลา
+                  decoration: const InputDecoration(
+                    labelText: 'TIME',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              controller: _detailsController,
+              maxLines: 3, // ทำให้รายละเอียดพิมพ์ได้หลายบรรทัด
+              decoration: const InputDecoration(
+                labelText: 'DETAILS',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('ยกเลิก'),
+          child: const Text(
+            'ยกเลิก',
+            style: TextStyle(color: Colors.red),
+          ),
         ),
-        TextButton(
+        ElevatedButton(
           onPressed: () {
             final title = _titleController.text;
             final time = _timeController.text;
@@ -52,6 +92,6 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
           child: const Text('เพิ่ม'),
         ),
       ],
-    );
+  );
   }
 }

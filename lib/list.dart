@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'add_task_dialog.dart'; // นำเข้าคลาส AddTaskDialog
+import 'add_task_dialog.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
@@ -9,7 +9,7 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  List<Map<String, String>> tasks = [];
+  List<Map<String, dynamic>> tasks = []; // เปลี่ยนเป็น dynamic เพื่อรองรับค่า bool
 
   void _addTask() async {
     final result = await showDialog<Map<String, String>>(
@@ -19,13 +19,21 @@ class _ListPageState extends State<ListPage> {
 
     if (result != null) {
       setState(() {
-        tasks.add(result);
+        tasks.add({
+          'title': result['title'],
+          'time': result['time'],
+          'details': result['details'],
+          'completed': false, // เพิ่มสถานะการทำสำเร็จ
+        });
       });
     }
   }
 
+  final dateRightNow = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
+    String formattedDate = "${dateRightNow.day}/${dateRightNow.month}/${dateRightNow.year}";
     return Scaffold(
       appBar: _customAppBar(context),
       backgroundColor: const Color.fromARGB(255, 27, 26, 26),
@@ -33,29 +41,69 @@ class _ListPageState extends State<ListPage> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           children: [
-            Container(
-              child: const Row(
-                children: [
-                  Text(
-                    'march 21, 2024',
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Color.fromARGB(255, 195, 195, 195)),
-                  )
-                ],
-              ),
+            Row(
+              children: [
+                const SizedBox(height: 30),
+                Text(
+                  formattedDate,
+                  style: const TextStyle(fontSize: 15, color: Color.fromARGB(255, 195, 195, 195)),
+                )
+              ],
             ),
             Expanded(
               child: ListView.builder(
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {
                   final task = tasks[index];
-                  return ListTile(
-                    title: Text(task['title'] ?? ''),
-                    subtitle: Text('${task['time'] ?? ''}\n${task['details'] ?? ''}'),
-                    textColor: Colors.white,
-                    tileColor: Color.fromARGB(255, 50, 50, 50),
-                    contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+                  final isCompleted = task['completed'] ?? false; // ตรวจสอบสถานะ completed
+                  return Container(
+                    margin: const EdgeInsets.symmetric(vertical: 5.0),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 50, 50, 50),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: ListTile(
+                      leading: Checkbox(
+                        value: isCompleted,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            task['completed'] = value ?? false;
+                          });
+                        },
+                      ),
+                      title: Text(
+                        task['title'] ?? '',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          decoration: isCompleted
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
+                      ),
+                      subtitle: Text(
+                        '${task['time'] ?? ''}\n${task['details'] ?? ''}',
+                        style: TextStyle(
+                          decoration: isCompleted
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
+                      ),
+                      textColor: Colors.white,
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10.0,
+                        horizontal: 15.0,
+                      ),
+                      trailing: isCompleted
+                          ? IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {
+                                setState(() {
+                                  tasks.removeAt(index); // ลบ task ออกจากรายการ
+                                });
+                              },
+                            )
+                          : null,
+                    ),
                   );
                 },
               ),
